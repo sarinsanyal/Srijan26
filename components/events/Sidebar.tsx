@@ -129,10 +129,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           <button
             onClick={() => {
               setIsStatusOpen(!isStatusOpen);
-              lenis?.scrollTo("top", {
-                immediate: true,
-                lock: true,
-              });
             }}
             className="cursor-pointer w-full font-elnath text-lg mb-2 pb-2 flex items-center justify-between text-yellow-200 border-b border-white/20 hover:text-yellow-100 transition-colors"
           >
@@ -150,7 +146,13 @@ const Sidebar: React.FC<SidebarProps> = ({
               {statuses.map((status) => (
                 <button
                   key={status}
-                  onClick={() => setActiveStatus(status)}
+                  onClick={() => {
+                    setActiveStatus(status);
+                    lenis?.scrollTo("top", {
+                      immediate: true,
+                      lock: true,
+                    });
+                  }}
                   style={{ clipPath: CLIP_PATH }}
                   className={`cursor-pointer font-euclid text-left pl-10 px-4 py-2 rounded-lg transition-all duration-200 text-sm ${
                     activeStatus === status
