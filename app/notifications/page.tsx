@@ -1,10 +1,62 @@
 "use client";
 
+import { Suspense, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import NotificationCard from "@/components/Notifications/NotificationCard";
 import WavyGradient from "@/components/WavyGradient";
+import Loading from "@/components/Loading";
+import LoginPage from "@/app/(auth)/login/page";
+import SignupPage from "@/app/(auth)/signup/page";
 
 export default function NotificationsPage() {
-  const notifications: any[] = [];
+  const { status } = useSession();
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [authMode, setAuthMode] = useState<"login" | "signup">("login");
+  const [fetching, setFetching] = useState(false);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      const fetchNotifications = async () => {
+        setFetching(true);
+        try {
+          const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+          const response = await fetch(
+            `${backendUrl}/api/v1/notifications/getAll`,
+            { credentials: "include" }
+          );
+          const result = await response.json();
+          setNotifications((result.data || []).reverse());
+        } catch (err) {
+          console.error("Failed to fetch notifications", err);
+        } finally {
+          setFetching(false);
+        }
+      };
+      fetchNotifications();
+    }
+  }, [status]);
+
+  if (status === "loading") return <Loading />;
+
+  if (status === "unauthenticated") {
+    return (
+      <main className="full-bleed min-h-screen relative text-white overflow-hidden">
+        <WavyGradient
+          color1="#bc6116"
+          color2="#8f0c03"
+          color3="#1A0000"
+          direction={20}
+          speed={1.5}
+          waveHeight={0.45}
+          noiseIntensity={5}
+          waveAmplitude={1}
+        />
+        <Suspense fallback={<Loading />}>
+          {authMode === "login" ? <LoginPage /> : <SignupPage />}
+        </Suspense>
+      </main>
+    );
+  }
 
   return (
     <main className="full-bleed min-h-screen relative text-white overflow-hidden">
@@ -29,13 +81,15 @@ export default function NotificationsPage() {
         </header>
 
         <div className="flex flex-col gap-6 w-full min-h-[250px] sm:min-h-[300px]">
-          {notifications.length > 0 ? (
+          {fetching ? (
+            <div className="flex justify-center py-20"><Loading /></div>
+          ) : notifications.length > 0 ? (
             notifications.map((note) => (
               <NotificationCard
-                key={note.id}
+                key={note._id || note.id}
                 title={note.title}
-                message={note.message}
-                date={note.date}
+                message={note.description}
+                date={new Date(note.createdAt).toLocaleDateString()}
                 isNew={note.isNew}
               />
             ))
@@ -62,7 +116,7 @@ export default function NotificationsPage() {
                   All Caught Up
                 </h3>
                 <p className="text-white/50 font-euclid text-sm sm:text-base max-w-xs sm:max-w-sm mx-auto">
-                  We don't have any new updates for you right now. Check back closer to the event!
+                  We don&apos;t have any new updates for you right now. Check back closer to the event!
                 </p>
               </div>
             </div>
