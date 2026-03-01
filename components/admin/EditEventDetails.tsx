@@ -9,6 +9,7 @@ import {
     FieldArray,
 } from "react-hook-form";
 import { getEventBySlug, updateEvent } from "@/services/EventAdminService";
+import { broadcastNotification } from "@/services/NotificationService";
 import { transformCategory, validateCategory } from "@/utils/eventListing";
 import { Clickable } from "../Clickable";
 import { EventFormType } from "@/types/events";
@@ -196,7 +197,6 @@ function EditEventDetails({ slug }: { slug: string | undefined }) {
             if (!data) return false;
 
             reset(data);
-
             setEventData(data);
             return true;
         };
@@ -208,8 +208,15 @@ function EditEventDetails({ slug }: { slug: string | undefined }) {
     if (loading) return <div>Loading...</div>;
 
     const onSubmit: SubmitHandler<EventFormType> = (data) => {
-        updateEvent(data).then((updatedEvent) => {
+        setMessage("Submitting..");
+        updateEvent(data).then(async (updatedEvent) => {
             setMessage(updatedEvent.message);
+            if (updatedEvent.ok) {
+                await broadcastNotification(
+                    `Event Updated: ${data.name}`,
+                    `${data.name} has been updated. Check the latest details on the events page.`
+                );
+            }
             console.log(updatedEvent);
         });
     };
