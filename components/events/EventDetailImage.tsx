@@ -13,7 +13,7 @@ export default function EventDetailImage({ src, alt, className }: Props) {
 
   return (
     <div
-      className={` ${className} relative w-full max-w-md aspect-3/4 lg:max-w-sm group`}
+      className={` ${className} relative w-full max-w-md aspect-4/5 lg:max-w-sm group`}
     >
       {/* Actual Image */}
       <div
