@@ -104,7 +104,7 @@ const CODING_EVENTS: Event[] = [
   },
   */
 
-  
+
   {
     id: "e5",
     slug: "ss3",
@@ -128,7 +128,7 @@ const CODING_EVENTS: Event[] = [
       { name: "Anuska Nath", contact: "9330129467" }
     ]
   },
-  
+
 
   /*
   {
@@ -182,7 +182,7 @@ const CODING_EVENTS: Event[] = [
   },
   */
 
-  
+
   {
     id: "e8",
     slug: "h4g",
@@ -206,7 +206,7 @@ const CODING_EVENTS: Event[] = [
       { name: "Vivek Haldar", contact: "9875495117" }
     ]
   },
-  
+
 
   /*
   {
@@ -288,7 +288,7 @@ const CODING_EVENTS: Event[] = [
 ];
 
 const ROBOTICS_EVENTS: Event[] = [
-  
+
   {
     id: "r4",
     slug: "traffiq",
@@ -311,9 +311,9 @@ const ROBOTICS_EVENTS: Event[] = [
       { name: "Aayush Konar", contact: "9972095077" }
     ]
   },
-  
 
-  
+
+
   {
     id: "r5",
     slug: "death-race",
@@ -337,7 +337,7 @@ const ROBOTICS_EVENTS: Event[] = [
       { name: "Ruchir Saha", contact: "7047505834" }
     ]
   },
-  
+
 
   /*
   {
@@ -417,33 +417,8 @@ const ROBOTICS_EVENTS: Event[] = [
   },
   */
 
-  
-  {
-    id: "r9",
-    slug: "xstream",
-    title: "XSTREAM",
-    category: "Circuits and Robotics",
-    color: "#1DDBFF",
-    description: "Technical design challenge to fabricate a car model optimized for aerodynamic performance. Tested inside a custom-built wind tunnel.",
-    format: "Offline",
-    teamSize: "1-4",
-    rules: ["Aerodynamic design", "Car model", "Wind tunnel test"],
-    lastDate: "TBA",
-    prizePool: "₹ 10,000",
-    link: "/register/XSTREAM",
-    driveLink: "https://drive.google.com/file/d/1IREzcdYRhvOZxxT50c1YUvedJxFkGdUB/view?usp=drivesdk",
-    image: "/images/posters/xstream.webp",
-    tags: ["Aerodynamics", "Design"],
-    status: "Open",
-    coordinators: [
-      { name: "Soham Bhattacharya", contact: "7439542892" },
-      { name: "Hiranmoy Mahato", contact: "7501767765" },
-      { name: "Saikat Dutta", contact: "9733225497" }
-    ]
-  },
-  
 
-  
+
   {
     id: "r11",
     slug: "thunderbolts",
@@ -467,9 +442,9 @@ const ROBOTICS_EVENTS: Event[] = [
       { name: "Niladri Saha", contact: "7439160736" }
     ]
   },
-  
 
-  
+
+
   {
     id: "r12",
     slug: "skysprint",
@@ -492,7 +467,7 @@ const ROBOTICS_EVENTS: Event[] = [
       { name: "Subhojit Roy", contact: "7003312027" }
     ]
   },
-  
+
 
   /*
   {
@@ -595,7 +570,7 @@ const ROBOTICS_EVENTS: Event[] = [
   },
   */
 
-  
+
   {
     id: "r17",
     slug: "iotbw",
@@ -619,11 +594,11 @@ const ROBOTICS_EVENTS: Event[] = [
       { name: "MD Tajuddin", contact: "8768589099" }
     ]
   }
-  
+
 ];
 
 const BUSINESS_EVENTS: Event[] = [
-  
+
   {
     id: "b1",
     slug: "indx",
@@ -647,7 +622,7 @@ const BUSINESS_EVENTS: Event[] = [
       { name: "Sarbajit Mukherjee", contact: "8478045750" }
     ]
   },
-  
+
 
   /*
   {
@@ -675,7 +650,7 @@ const BUSINESS_EVENTS: Event[] = [
   },
   */
 
-  
+
   {
     id: "b3",
     slug: "ace-the-case",
@@ -699,9 +674,9 @@ const BUSINESS_EVENTS: Event[] = [
       { name: "Dipayan Sardar", contact: "9733817692" }
     ]
   },
-  
 
-  
+
+
   {
     id: "b4",
     slug: "biznez-plan",
@@ -725,9 +700,9 @@ const BUSINESS_EVENTS: Event[] = [
       { name: "Adrija Das", contact: "7980466251" }
     ]
   },
-  
 
-  
+
+
   {
     id: "b5",
     slug: "stratedgex",
@@ -751,7 +726,7 @@ const BUSINESS_EVENTS: Event[] = [
       { name: "Md Arsh Ansari", contact: "7003184131" }
     ]
   },
-  
+
 
   /*
   {
@@ -779,7 +754,7 @@ const BUSINESS_EVENTS: Event[] = [
   },
   */
 
-  
+
   {
     id: "b7",
     slug: "capital-clash",
@@ -803,7 +778,7 @@ const BUSINESS_EVENTS: Event[] = [
       { name: "Shubham sharma", contact: "9560134006" }
     ]
   },
-  
+
 
 
   {
@@ -881,6 +856,29 @@ const BRAINSTORMING_EVENTS: Event[] = [
     ]
   }
   */
+  {
+    id: "br3",
+    slug: "xstream",
+    title: "XSTREAM",
+    category: "Brainstorming",
+    color: "#1DDBFF",
+    description: "Technical design challenge to fabricate a car model optimized for aerodynamic performance. Tested inside a custom-built wind tunnel.",
+    format: "Offline",
+    teamSize: "1-4",
+    rules: ["Aerodynamic design", "Car model", "Wind tunnel test"],
+    lastDate: "TBA",
+    prizePool: "₹ 10,000",
+    link: "/register/XSTREAM",
+    driveLink: "https://drive.google.com/file/d/1IREzcdYRhvOZxxT50c1YUvedJxFkGdUB/view?usp=drivesdk",
+    image: "/images/posters/xstream.webp",
+    tags: ["Aerodynamics", "Design"],
+    status: "Open",
+    coordinators: [
+      { name: "Soham Bhattacharya", contact: "7439542892" },
+      { name: "Hiranmoy Mahato", contact: "7501767765" },
+      { name: "Saikat Dutta", contact: "9733225497" }
+    ]
+  },
 ];
 
 const ESPORTS_EVENTS: Event[] = [
@@ -959,7 +957,7 @@ const ESPORTS_EVENTS: Event[] = [
   },
   */
 
-  
+
   {
     id: "e-sp4",
     slug: "clash-royale",
@@ -982,7 +980,7 @@ const ESPORTS_EVENTS: Event[] = [
       { name: "ANSH KUMAR SINGH", contact: "9775756073" }
     ]
   },
-  
+
 
   /*
   {

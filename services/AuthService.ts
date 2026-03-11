@@ -8,6 +8,7 @@ import { auth, signIn, unstable_update } from "@/auth";
 import { redirect } from "next/navigation";
 import { CONST } from "@/utils/constants";
 import { AuthError } from "next-auth";
+import { revalidateTag } from "next/cache";
 
 const getUserByEmail = async (email: string | null) => {
   if (!email) return null;
@@ -62,6 +63,19 @@ const validateUser = async (user: User | null, password: string) => {
 const handleSignin = async (email: string, password: string) => {
   if (!email || !password) return { ok: false, message: "Email and password required" };
   try {
+    const user = await getUserByEmail(email);
+    if (user && (user.role === "ADMIN" || user.role === "SUPERADMIN")) {
+       const isValid = await validateUser(user as User, password);
+       if (isValid) {
+         revalidateTag("admin-events", {});
+         revalidateTag("superadmin-users", {});
+         revalidateTag("superadmin-merch", {});
+         revalidateTag("event-participants", {});
+         revalidateTag("event-admins", {});
+         revalidateTag("live-events", {});
+       }
+    }
+
     await signIn("credentials", {
       email,
       password,

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 import {
     searchUsersByEmail,
     getEventAdmins,
@@ -55,6 +56,8 @@ export async function POST(req: NextRequest) {
         }
 
         await addEventAdmin(eventId, userId);
+        revalidateTag("event-admins", {});
+        revalidateTag("superadmin-users", {});
         return NextResponse.json({ success: true });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
@@ -77,6 +80,8 @@ export async function DELETE(req: NextRequest) {
         }
 
         await removeEventAdmin(eventId, userId);
+        revalidateTag("event-admins", {});
+        revalidateTag("superadmin-users", {});
         return NextResponse.json({ success: true });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });

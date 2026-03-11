@@ -1,9 +1,11 @@
-﻿"use server";
+"use server";
 
 import { prisma } from "@/prisma/client";
 import { AdminEvent, EventParticipant, VerificationFilter } from "@/types/admin";
+import { unstable_cache } from "next/cache";
+import { checkAdminAuthorization } from "@/services/AuthService";
 
-const getAdminEvents = async (
+const _getAdminEvents = async (
   userId: string,
   role: string
 ): Promise<AdminEvent[]> => {
@@ -40,7 +42,19 @@ const getAdminEvents = async (
   }));
 };
 
-const getEventParticipantsBySlug = async (
+const getAdminEvents = async (userId: string, role: string) => {
+  if (role !== "ADMIN" && role !== "SUPERADMIN") return [];
+  
+  const getCachedAdminEvents = unstable_cache(
+    async (uid: string, r: string) => _getAdminEvents(uid, r),
+    [`admin-events-${userId}`],
+    { tags: ["admin-events"], revalidate: 180 } // 3 minutes
+  );
+  
+  return getCachedAdminEvents(userId, role);
+};
+
+const _getEventParticipantsBySlug = async (
   eventSlug: string,
   verification: VerificationFilter = "all"
 ) => {
@@ -87,7 +101,23 @@ const getEventParticipantsBySlug = async (
   return users;
 };
 
-export const getAllUsers = async () => {
+const getEventParticipantsBySlug = async (
+  eventSlug: string,
+  verification: VerificationFilter = "all"
+) => {
+  const user = await checkAdminAuthorization();
+  if (!user || (user.role !== "ADMIN" && user.role !== "SUPERADMIN")) return [] as EventParticipant[];
+
+  const getCachedParticipants = unstable_cache(
+    async (slug: string, verif: VerificationFilter) => _getEventParticipantsBySlug(slug, verif),
+    [`event-participants-${eventSlug}-${verification}`],
+    { tags: ["admin-events", "event-participants"], revalidate: 180 }
+  );
+  
+  return getCachedParticipants(eventSlug, verification);
+};
+
+const _getAllUsers = async () => {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
     select: {
@@ -106,7 +136,20 @@ export const getAllUsers = async () => {
   return users;
 };
 
-export const getAllMerchandise = async () => {
+export const getAllUsers = async () => {
+  const user = await checkAdminAuthorization();
+  if (!user || user.role !== "SUPERADMIN") return [];
+
+  const getCachedUsers = unstable_cache(
+    async () => _getAllUsers(),
+    [`superadmin-all-users`],
+    { tags: ["superadmin-users"], revalidate: 180 }
+  );
+
+  return getCachedUsers();
+};
+
+const _getAllMerchandise = async () => {
   const merchandise = await prisma.merchandise.findMany({
     where: {
       status: "completed",
@@ -129,7 +172,20 @@ export const getAllMerchandise = async () => {
   return merchandise;
 };
 
-export const searchUsersByEmail = async (query: string) => {
+export const getAllMerchandise = async () => {
+  const user = await checkAdminAuthorization();
+  if (!user || user.role !== "SUPERADMIN") return [];
+
+  const getCachedMerch = unstable_cache(
+    async () => _getAllMerchandise(),
+    [`superadmin-all-merch`],
+    { tags: ["superadmin-merch"], revalidate: 180 }
+  );
+  
+  return getCachedMerch();
+};
+
+const _searchUsersByEmail = async (query: string) => {
   if (!query) return [];
   const users = await prisma.user.findMany({
     where: {
@@ -149,7 +205,20 @@ export const searchUsersByEmail = async (query: string) => {
   return users;
 };
 
-export const getEventAdmins = async (eventId: string) => {
+export const searchUsersByEmail = async (query: string) => {
+  const user = await checkAdminAuthorization();
+  if (!user || user.role !== "SUPERADMIN") return [];
+
+  const getCachedSearchResults = unstable_cache(
+    async (q: string) => _searchUsersByEmail(q),
+    [`search-users-${query}`],
+    { tags: ["superadmin-users"], revalidate: 180 }
+  );
+  
+  return getCachedSearchResults(query);
+};
+
+const _getEventAdmins = async (eventId: string) => {
   const admins = await prisma.eventAdmin.findMany({
     where: { eventId },
     include: {
@@ -163,6 +232,19 @@ export const getEventAdmins = async (eventId: string) => {
     },
   });
   return admins.map((a) => a.user);
+};
+
+export const getEventAdmins = async (eventId: string) => {
+  const user = await checkAdminAuthorization();
+  if (!user || user.role !== "SUPERADMIN") return [];
+
+  const getCachedAdmins = unstable_cache(
+    async (id: string) => _getEventAdmins(id),
+    [`event-admins-${eventId}`],
+    { tags: ["admin-events", "event-admins"], revalidate: 180 }
+  );
+
+  return getCachedAdmins(eventId);
 };
 
 export const addEventAdmin = async (eventId: string, userId: string) => {
